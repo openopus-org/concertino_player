@@ -32,17 +32,24 @@ conc_lastplayerstatus = false;
 conc_seek = 0;
 conc_seekto = 0;
 
+/* detecting home screen app on iphone */
+
+if (("standalone" in window.navigator) && !window.navigator.standalone) {
+    conc_disabled = true;
+    conc_disabledreason = "homescreen";
+}
+
 conc_options = {
     historical: JSON.parse(localStorage.confighistorical),
     compilations: JSON.parse(localStorage.configcompilations),
     timeout: 10000,
-    backend: 'https://api.' + window.location.hostname,
-    opusbackend: 'https://api.openopus.' + (window.location.hostname.split('.')[1] == 'local' ? 'local' : 'org'),
+    backend: 'https://' + (window.location.hostname.split('.')[0] == 'beta' ? 'beta.' : '') + 'api.' + window.location.hostname,
+    opusbackend: 'https://' + (window.location.hostname.split('.')[0] == 'beta' ? 'beta.' : '') + 'api.openopus.' + (window.location.hostname.split('.').pop() == 'local' ? 'local' : 'org'),
     publicsite: 'https://getconcertino.com',
-    shareurl: 'https://cncert.' + (window.location.hostname.split('.')[1] == 'local' ? 'local' : 'in'),
+    shareurl: 'https://' + (window.location.hostname.split('.')[0] == 'beta' ? 'beta.' : '') + 'cncert.' + (window.location.hostname.split('.').pop() == 'local' ? 'local' : 'in'),
     smartradio: JSON.parse(localStorage.smartradio),
     notshow: false,
-    version: '1.19.11',
+    version: '1.19.11.16' + (window.location.hostname.split('.')[0] == 'beta' ? ' beta' : ''),
     secondsEMEcert: 12 * 60
 };
 
@@ -163,7 +170,6 @@ conc_appleauth = function () {
             applemusic.addEventListener('playbackTimeDidChange', function () { conc_slider ({id: (applemusic.player.nowPlayingItem ? applemusic.player.nowPlayingItem.id : 0), duration: applemusic.player.currentPlaybackDuration, position: applemusic.player.currentPlaybackTime }); });
             applemusic.addEventListener('playbackStateDidChange', function () { conc_state (applemusic.player.playbackState); });
             applemusic.addEventListener('mediaCanPlay', function () { 
-              //console.log (conc_seek);
               if (conc_seek) {
                 applemusic.player.volume = 0;
                 conc_seekto = conc_seek;
@@ -188,12 +194,14 @@ conc_appleauth = function () {
 
 conc_toggleplay = function ()
 {
+  applemusic = MusicKit.getInstance();
+
   if (applemusic.player.queue.isEmpty || (applemusic.player.playbackState == 10 && applemusic.player.queue.nextPlayableItemIndex == undefined))
   {
     conc_appleplay (conc_playbuffer.tracks, 0);
   }
   else
-  {
+  {  
     if (applemusic.player.isPlaying)
     {
       applemusic.player.pause ();
@@ -209,6 +217,8 @@ conc_nexttrack = function ()
 {
   $(".slider").find('.bar').css('width', '0%');
   $(".timer").html('0:00');
+
+  applemusic = MusicKit.getInstance();
   applemusic.player.skipToNextItem();
 }
 
@@ -216,6 +226,8 @@ conc_prevtrack = function ()
 {
   $(".slider").find('.bar').css('width', '0%');
   $(".timer").html('0:00');
+
+  applemusic = MusicKit.getInstance();
   applemusic.player.skipToPreviousItem();
 }
 
@@ -226,6 +238,7 @@ conc_track = function (offset)
     $(`#${conc_disabledreason}`).leanModal();
     return;
   } else {
+    applemusic = MusicKit.getInstance();
     if (applemusic.player.queue.length) {
       applemusic.player.changeToMediaAtIndex (offset);
     }
@@ -239,6 +252,8 @@ conc_track = function (offset)
 
 conc_state = function (state)
 {
+  applemusic = MusicKit.getInstance();
+
   switch (state)
   {
     case 1:
@@ -294,6 +309,7 @@ conc_slider = function (arg)
 
     if (arg.position != 0 && (arg.position % conc_options.secondsEMEcert) === 0) {
       conc_seek = arg.position;
+      applemusic = MusicKit.getInstance();
       conc_appleplay (conc_playbuffer.tracks, applemusic.player.nowPlayingItemIndex);
     }
   }
@@ -1012,6 +1028,7 @@ conc_playingdetails = function ()
 
 conc_checkplayer = function ()
 {
+  applemusic = MusicKit.getInstance();
   if (!applemusic.player.isPlaying && !conc_lastplayerstatus)
   {
     applemusic.setQueue({
@@ -1033,6 +1050,8 @@ conc_appleplay = function (tracks, offset)
     $(`#${conc_disabledreason}`).leanModal();
     return;
   }
+
+  applemusic = MusicKit.getInstance();
 
   if (applemusic.player.isPlaying) applemusic.player.stop();
   applemusic.setQueue({

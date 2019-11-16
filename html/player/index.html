@@ -5,7 +5,7 @@
     <link rel="manifest" href="/manifest.json">
     <meta name="viewport" content="initial-scale=1.1, maximum-scale=1.1">
 
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="no">
 
     <link rel="manifest" href="/manifest.json">
     <link rel="apple-touch-icon" href="/img/icons/120x120.png">
@@ -41,8 +41,10 @@
                 app: {
                     name: 'Concertino',
                     build: '1.19.11',
+                    version: '1.19.11',
                     icon: 'https://concertino.' + (window.location.hostname.split('.')[1] == 'local' ? 'local' : 'app') + '/img/icon512.png'
-                }
+                },
+                bitrate: MusicKit.PlaybackBitrate.HIGH
             });
             $( document ).ready(function() {
                 setTimeout (function () {
@@ -314,6 +316,12 @@
         <p>Sorry. Due to Apple Music limitations, this browser is not supported. Concertino works on Chrome, Firefox and Edge.</p>
         <p class="modaldetails">You can browse Concertino's catalogue, create playlists, favorite works, composers and recordings, but playback is disabled.</p>
         <a href="javascript:$('#browsernotsupported').closeModal()">Close</a>
+    </div>
+    <div id="homescreen" class="modal">
+        <h2>Error</h2>
+        <p>Due to iOS limitations, playback is disabled in full screen mode (icon on the home screen). To enable playback, please open <strong>concertino.app</strong> on your browser. <br />(Apple issue, not ours. Sorry.)</p>
+        <p class="modaldetails">You can browse Concertino's catalogue, create playlists, favorite works, composers and recordings, but playback is disabled.</p>
+        <a href="javascript:$('#homescreen').closeModal()">Close</a>
     </div>
     <div id="playlistmodal" class="modal">
         <h2>Playlist</h2>
