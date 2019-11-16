@@ -43,7 +43,7 @@ conc_options = {
     historical: JSON.parse(localStorage.confighistorical),
     compilations: JSON.parse(localStorage.configcompilations),
     timeout: 10000,
-    backend: 'https://' + (window.location.hostname.split('.')[0] == 'beta' ? 'beta.' : '') + 'api.' + window.location.hostname,
+    backend: 'https://' + (window.location.hostname.split('.')[0] == 'beta' ? 'beta.' : '') + 'api.' + window.location.hostname.replace('beta.',''),
     opusbackend: 'https://' + (window.location.hostname.split('.')[0] == 'beta' ? 'beta.' : '') + 'api.openopus.' + (window.location.hostname.split('.').pop() == 'local' ? 'local' : 'org'),
     publicsite: 'https://getconcertino.com',
     shareurl: 'https://' + (window.location.hostname.split('.')[0] == 'beta' ? 'beta.' : '') + 'cncert.' + (window.location.hostname.split('.').pop() == 'local' ? 'local' : 'in'),
