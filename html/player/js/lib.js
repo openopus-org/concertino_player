@@ -34,7 +34,7 @@ conc_seekto = 0;
 
 /* detecting home screen app on iphone */
 
-if (("standalone" in window.navigator) && !window.navigator.standalone) {
+if (window.matchMedia('(display-mode: standalone)').matches && !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/)) {
     conc_disabled = true;
     conc_disabledreason = "homescreen";
 }
@@ -49,7 +49,7 @@ conc_options = {
     shareurl: 'https://' + (window.location.hostname.split('.')[0] == 'beta' ? 'beta.' : '') + 'cncert.' + (window.location.hostname.split('.').pop() == 'local' ? 'local' : 'in'),
     smartradio: JSON.parse(localStorage.smartradio),
     notshow: false,
-    version: '1.19.11.16' + (window.location.hostname.split('.')[0] == 'beta' ? ' beta' : ''),
+    version: '1.19.11.17' + (window.location.hostname.split('.')[0] == 'beta' ? ' beta' : ''),
     secondsEMEcert: 12 * 60
 };
 
