@@ -1054,6 +1054,10 @@ conc_appleplay = function (tracks, offset)
   if ((/iP(hone|od|ad)/.test(navigator.platform)) && !localStorage.iphonewarning) {
     $('#tuning-modal').hide(0, function () { $("#mobile-safari").leanModal(); });
     localStorage.iphonewarning = true;
+    iphonewarning = true;
+  }
+  else {
+    iphonewarning = false;
   }
 
   applemusic = MusicKit.getInstance();
@@ -1068,7 +1072,7 @@ conc_appleplay = function (tracks, offset)
       if (conc_onair) conc_notification($('#nowplaying li.work a').html().split("<")[0], $('#nowplaying li.cover a img')[0].currentSrc, $('#nowplaying li.composer a').html());
     }
     applemusic.changeToMediaAtIndex(offset);
-    $('#tuning-modal').closeModal();
+    if (!iphonewarning) $('#tuning-modal').closeModal();
     
   }).catch(function () { conc_notavailable (); });  
 }
