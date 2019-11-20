@@ -1052,6 +1052,7 @@ conc_appleplay = function (tracks, offset)
   }
 
   if ((/iP(hone|od|ad)/.test(navigator.platform)) && !localStorage.iphonewarning) {
+    $('#tuning-modal').hide();
     $(`#mobile-safari`).leanModal();
     localStorage.iphonewarning = true;
   }
