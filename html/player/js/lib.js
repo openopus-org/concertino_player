@@ -42,7 +42,7 @@ conc_options = {
     shareurl: 'https://' + (window.location.hostname.split('.')[0] == 'beta' ? 'beta.' : '') + 'cncert.' + (window.location.hostname.split('.').pop() == 'local' ? 'local' : 'in'),
     smartradio: JSON.parse(localStorage.smartradio),
     notshow: false,
-    version: '1.19.11.17.13' + (window.location.hostname.split('.')[0] == 'beta' ? ' beta' : ''),
+    version: '1.19.11.20' + (window.location.hostname.split('.')[0] == 'beta' ? ' beta' : ''),
     secondsEMEcert: 12 * 60
 };
 
@@ -1049,6 +1049,11 @@ conc_appleplay = function (tracks, offset)
     $('#tuning-modal').hide();
     $(`#${conc_disabledreason}`).leanModal();
     return;
+  }
+
+  if ((/iP(hone|od|ad)/.test(navigator.platform)) && !localStorage.iphonewarning) {
+    $(`#mobile-safari`).leanModal();
+    localStorage.iphonewarning = true;
   }
 
   applemusic = MusicKit.getInstance();
