@@ -42,7 +42,7 @@ conc_options = {
     shareurl: 'https://' + (window.location.hostname.split('.')[0] == 'beta' ? 'beta.' : '') + 'cncert.' + (window.location.hostname.split('.').pop() == 'local' ? 'local' : 'in'),
     smartradio: JSON.parse(localStorage.smartradio),
     notshow: false,
-    version: '1.19.11.20' + (window.location.hostname.split('.')[0] == 'beta' ? ' beta' : ''),
+    version: '1.19.11.28' + (window.location.hostname.split('.')[0] == 'beta' ? ' beta' : ''),
     secondsEMEcert: 12 * 60
 };
 
@@ -2220,4 +2220,37 @@ conc_swipedetect = function (el, callback) {
       handleswipe(swipedir)
       //e.preventDefault()
   }, false)
+}
+
+// settings screen: patrons listing
+
+conc_settings = function (mode) {
+
+  $.ajax({
+    url: conc_options.opusbackend + '/patron/list.json',
+    method: "GET",
+    success: function (response) {
+
+      if (response.status.rows >= 1) {
+        ulpatrons = $('#patrons ul');
+        ulpatrons.empty();
+
+        for (patron in response.patrons) {
+          ulpatrons.append(`<li>${response.patrons[patron]}</li>`);
+        }
+
+        $('#patrons').removeClass('hidden');
+      }
+      
+      switch (mode) {
+        case "desktop":
+          $('#config').leanModal();
+          break;
+        case "mobile":
+          conc_mobilepage('settings');
+          break;
+      }
+    }
+  });
+
 }

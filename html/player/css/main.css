@@ -56,12 +56,12 @@ a
 	background-color: #121212;
 }
 
-#works::-webkit-scrollbar-thumb
+#works::-webkit-scrollbar-thumb, #patrons ul::-webkit-scrollbar-thumb
 {
 	background-color: #121212;
 }
 
-#works::-webkit-scrollbar-track-piece
+#works::-webkit-scrollbar-track-piece, #patrons ul::-webkit-scrollbar-track-piece
 {
 	background-color: #2B2B2E;
 }
@@ -2108,7 +2108,7 @@ body.windows #radiotop a
 	margin-bottom: 22px;
 }
 
-.modal a
+.modal a:not(.about)
 {
 	color: #FE365E;
 	width: 120px;
@@ -2126,7 +2126,7 @@ body.windows #radiotop a
 	border-radius: 12px;
 }
 
-.modal a:hover
+.modal a:not(.about):hover
 {
 	background-color: #FE365E;
 	color: #000;
@@ -2842,18 +2842,64 @@ body.showingplayerbar #config #signin {
 	font-size: 12px;
 }
 
+.hidden {
+	display: none;
+}
+
+#about {
+	width: 45%;
+	float: left;
+}
+
+#patrons {
+	width: 45%;
+	float: right;
+}
+
+#about h2, #patrons h2 {
+	margin-top: 20px;
+	margin-bottom: 2px;
+}
+
+#patrons h2 {
+	margin-bottom: 7px;
+}
+
+#config #about li span {
+    display: block;
+    font-family: 'Barlow', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+#config #about li, #patrons li {
+    padding: 7px 0;
+    font-family: 'Nunito', sans-serif;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+#patrons ul {
+	height: 200px;
+	overflow: auto;
+}
+
+#patrons li {
+	padding: 3px;
+}
+
 /* firefox tweak */
 
-#composers, #favorites, #works, #albums {
+#composers, #favorites, #works, #albums, #patrons ul {
 	scrollbar-width: none;
 }
 
-#composers:hover, #favorites:hover, #albums:hover {
+#composers:hover, #favorites:hover, #albums:hover, #patrons ul:hover {
   	scrollbar-color: #28282B;
 	scrollbar-width: thin;
 }
 
-#works:hover {
+#works:hover, #patrons ul:hover {
   	scrollbar-color: #000;
 	scrollbar-width: thin;
 }
