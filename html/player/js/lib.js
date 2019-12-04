@@ -42,8 +42,10 @@ conc_options = {
     shareurl: 'https://' + (window.location.hostname.split('.')[0] == 'beta' ? 'beta.' : '') + 'cncert.' + (window.location.hostname.split('.').pop() == 'local' ? 'local' : 'in'),
     smartradio: JSON.parse(localStorage.smartradio),
     notshow: false,
-    version: '1.19.11.28' + (window.location.hostname.split('.')[0] == 'beta' ? ' beta' : ''),
-    secondsEMEcert: 12 * 60
+    version: '1.19.12' + (window.location.hostname.split('.')[0] == 'beta' ? ' beta' : ''),
+    secondsEMEcert: 12 * 60,
+    too_many_tracks: 24,
+    no_track_labels: 15
 };
 
 window.onpopstate = function (event) {
@@ -298,11 +300,13 @@ conc_slider = function (arg)
   {
     $("#timer-"+arg.id).html("0:00");
     $("#slider-"+arg.id).find('.bar').css('width', '0%');
-    $("#globalslider-"+arg.id).find('.bar').css('width', '0%');
+    if (!$('#playercontrols').hasClass('toomanytracks')) $("#globalslider-"+arg.id).find('.bar').css('width', '0%');
   }
   else if (!conc_seekto && !conc_seek)
   {
     $("#timerglobal").html(conc_readabletime(conc_playbuffer.accdurations[conc_playbuffer.tracks.indexOf(arg.id)] + arg.position));
+    if ($('#playercontrols').hasClass('toomanytracks')) $("#globalslider-total").find('.bar').css('width', (100*(conc_playbuffer.accdurations[conc_playbuffer.tracks.indexOf(arg.id)] + arg.position)/conc_playbuffer.accdurations[conc_playbuffer.accdurations.length - 1]) + '%');
+
     $("#timer-"+arg.id).html(conc_readabletime(arg.position));
     $("#slider-"+arg.id).find('.bar').css('width', (100*arg.position/arg.duration) + '%');
     $("#globalslider-"+arg.id).find('.bar').css('width', (100*arg.position/arg.duration) + '%');
@@ -343,7 +347,16 @@ conc_readabletime = function(time)
     if (time && time > 0.0)
     {
         var sec = parseInt(time % (60));
-        return parseInt(time / (60)) + ':' + (sec < 10 ? '0'+sec : sec);
+        var min = parseInt(time / (60));
+
+        if (min > 59) {
+          var minutes = parseInt(min % (60));
+          var part = parseInt(min / (60)) + ':' + (minutes < 10 ? '0'+minutes : minutes);
+        } else {
+          var part = min;
+        }
+
+        return part + ':' + (sec < 10 ? '0'+sec : sec);
     }
     else
     {
@@ -951,21 +964,14 @@ conc_recordingaction = function (list, auto)
       $('#playertracks').html('');
       $('#globaltracks').html('');
 
-      if (list.recording.tracks.length >= 60) {
-        trackadjust = ' - 0px';
-        $('#globaltracks').addClass("tootoomanytracks");
+      $('#playercontrols').removeClass("toolong toomanytracks nolabels");
+      
+      if (list.recording.length >= 3600) {
+        $('#playercontrols').addClass("toolong");
       }
-      else {
-        trackadjust = ' - 0px';
-        $('#globaltracks').removeClass("tootoomanytracks");
-        if (list.recording.tracks.length >= 12) 
-        {
-          $('#globaltracks').addClass("toomanytracks");
-        }
-        else
-        {
-          $('#globaltracks').removeClass("toomanytracks");
-        }
+
+      if (list.recording.tracks.length > conc_options.no_track_labels) {
+        $('#playercontrols').addClass("nolabels");
       }
 
       var currtrack = 0;
@@ -980,7 +986,15 @@ conc_recordingaction = function (list, auto)
         var pctsize = ((list.recording.tracks[track].length) / list.recording.length) * 100;
         currtrack = currtrack + 1;
         $('#playertracks').append('<li><a class="tracktitle" href="javascript:conc_track(' + track + ')">' + list.recording.tracks[track].title + '</a><div id="timer-' + list.recording.tracks[track].apple_trackid + '" class="timer">0:00</div><div id="slider-' + list.recording.tracks[track].apple_trackid + '" class="slider"><div class="buffer"></div><div class="bar"></div></div><div class="duration">' + conc_readabletime(list.recording.tracks[track].length) + '</div></li>');
-        $('#globaltracks').append('<li style="width: calc(' + Math.round(pctsize * 1000) / 1000 + '%' + trackadjust + ')"><a class="tracktitle" href="javascript:conc_track(' + track + ')">' + currtrack + '</a><div id="globalslider-' + list.recording.tracks[track].apple_trackid + '" class="slider"><div class="buffer"></div><div class="bar"></div></div><div id="globaltimer-' + track + '" class="timer">0:00</div><div class="duration">' + conc_readabletime(list.recording.tracks[track].length) + '</div></li>');
+
+        if (list.recording.tracks.length <= conc_options.too_many_tracks) {
+          $('#globaltracks').append('<li style="width: calc(' + Math.round(pctsize * 1000) / 1000 + '%' + ')"><a class="tracktitle" href="javascript:conc_track(' + track + ')">' + currtrack + '</a><div id="globalslider-' + list.recording.tracks[track].apple_trackid + '" class="slider"><div class="buffer"></div><div class="bar"></div></div></li>');
+        }
+      }
+
+      if (list.recording.tracks.length > conc_options.too_many_tracks) {
+        $('#playercontrols').addClass("toomanytracks");
+        $('#globaltracks').append('<li style="width: 100%"><div id="globalslider-total" class="slider"><div class="buffer"></div><div class="bar"></div></div></li>');
       }
 
       $('#durationglobal').html(conc_readabletime(list.recording.length));

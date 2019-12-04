@@ -65,8 +65,8 @@ h2
 
 #toolbar
 {
-    display: block;
 	position: fixed;
+    display: block;
 	top: 0px;
 	overflow: hidden;
 	height: 36px;
@@ -75,18 +75,53 @@ h2
 	background-image: linear-gradient(#3C3C3C, #121212);
 }
 
+#toolbar #logo
+{
+	display: block;
+	width: 120px;
+	margin: 8px auto;
+}
+
 #toolbar .logo
 {
 	background-repeat: no-repeat;
-	width: 120px;
-	height: 21px;
-	text-indent: -9000px;
-	overflow: hidden;
-	display: block;
-	background-image: url("../img/logo.png");
-	background-size: 120px 21px;
-	margin: 8px auto;
-	bottom: 7px;
+    width: 120px;
+    height: 21px;
+    text-indent: -9000px;
+    overflow: hidden;
+    display: block;
+    background-image: url(../img/logo.png);
+    background-size: 120px 21px;
+	float: left;
+}
+
+body.beta #toolbar #logo 
+{
+	width: 172px;
+}
+
+#toolbar #beta 
+{
+	display: none;
+}
+
+body.beta #toolbar #beta 
+{
+	display: inline-block;
+    font-family: 'Nunito', sans-serif;
+    font-size: 9px;
+    text-transform: uppercase;
+    font-weight: 800;
+    font-size: 10px;
+    color: #000000;
+    background-color: #FE365E;
+    border-radius: 10px;
+    padding-top: 1px;
+    width: 40px;
+    height: 13px;
+    text-align: center;
+    margin-top: 3px;
+    margin-left: 10px;
 }
 
 li.cover a img {
@@ -710,7 +745,7 @@ body.player #nowplaying #toggle {
 	bottom: 21px;
     left: 61px;
     text-align: right;
-    width: 30px;
+    width: 45px;
 }
 
 #playercontrols #durationglobal
@@ -728,8 +763,8 @@ body.player #nowplaying #toggle {
 	font-size: 10px;
     position: absolute;
     bottom: 15px;
-    left: 103px;
-    width: calc(100% - 172px);
+	left: 120px;
+    width: calc(100% - 193px);
 }
 
 #globaltracks li {
