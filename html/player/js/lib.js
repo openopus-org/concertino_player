@@ -42,7 +42,7 @@ conc_options = {
     shareurl: 'https://' + (window.location.hostname.split('.')[0] == 'beta' ? 'beta.' : '') + 'cncert.' + (window.location.hostname.split('.').pop() == 'local' ? 'local' : 'in'),
     smartradio: JSON.parse(localStorage.smartradio),
     notshow: false,
-    version: '1.19.12' + (window.location.hostname.split('.')[0] == 'beta' ? ' beta' : ''),
+    version: '1.20' + (window.location.hostname.split('.')[0] == 'beta' ? ' beta' : ''),
     secondsEMEcert: 12 * 60,
     too_many_tracks: 24,
     no_track_labels: 15
@@ -1085,7 +1085,9 @@ conc_appleplay = function (tracks, offset)
       $(".timer").html('0:00');
       if (conc_onair) conc_notification($('#nowplaying li.work a').html().split("<")[0], $('#nowplaying li.cover a img')[0].currentSrc, $('#nowplaying li.composer a').html());
     }
-    applemusic.changeToMediaAtIndex(offset);
+    applemusic.changeToMediaAtIndex(offset).
+      catch(function () { conc_notavailable (); });
+
     if (!iphonewarning) $('#tuning-modal').closeModal();
     
   }).catch(function () { conc_notavailable (); });  
