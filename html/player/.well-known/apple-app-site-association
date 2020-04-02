@@ -1,19 +1,18 @@
 {
   "applinks": {
-    "apps": [],
-    "details": [
-      {
-        "appIDs": [ "TXW2W532B9.org.openopus.Concertino" ],
-        "appID": "TXW2W532B9.org.openopus.Concertino",
-        "paths": [
-          "/*"
-        ]
-      }
-    ]
-  },
-  "webcredentials": {
-    "apps": [
-        "TXW2W532B9.org.openopus.Concertino"
-    ]
-  }
+      "details": [
+           {
+             "appIDs": [ "TXW2W532B9.org.openopus.Concertino" ],
+             "components": [
+               {
+                  "/": "/*",
+                  "comment": "Matches any URL"
+               }
+             ]
+           }
+       ]
+   },
+   "webcredentials": {
+      "apps": [ "TXW2W532B9.org.openopus.Concertino" ]
+   }
 }
