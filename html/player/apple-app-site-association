@@ -2,7 +2,7 @@
   "applinks": {
       "details": [
            {
-             "appIDs": [ "TXW2W532B9.org.openopus.concertino.ios” ],
+             "appIDs": [ "TXW2W532B9.org.openopus.concertino.ios" ],
              "components": [
                {
                   "/": "/*",
@@ -13,6 +13,6 @@
        ]
    },
    "webcredentials": {
-      "apps": [ "TXW2W532B9.org.openopus.concertino.ios” ]
+      "apps": [ "TXW2W532B9.org.openopus.concertino.ios" ]
    }
 }
