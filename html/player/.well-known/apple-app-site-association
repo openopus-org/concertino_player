@@ -5,7 +5,7 @@
              "appIDs": [ "TXW2W532B9.org.openopus.Concertino" ],
              "components": [
                {
-                  "/": "*",
+                  "/": "/*",
                   "comment": "Matches any URL"
                }
              ]
