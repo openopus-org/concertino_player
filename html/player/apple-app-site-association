@@ -1,32 +1,23 @@
 {
+  "activitycontinuation": {
+    "apps": [
+      "TXW2W532B9.org.openopus.concertino.ios"
+    ]
+  },
   "applinks": {
       "details": [
            {
-             "appIDs": [ "ABCDE12345.com.example.app", "ABCDE12345.com.example.app2" ],
+             "appIDs": [ "TXW2W532B9.org.openopus.concertino.ios" ],
              "components": [
                {
-                  "#": "no_universal_links",
-                  "exclude": true,
-                  "comment": "Matches any URL whose fragment equals no_universal_links and instructs the system not to open it as a universal link"
-               },
-               {
-                  "/": "/buy/*",
-                  "comment": "Matches any URL whose path starts with /buy/"
-               },
-               {
-                  "/": "/help/website/*",
-                  "exclude": true,
-                  "comment": "Matches any URL whose path starts with /help/website/ and instructs the system not to open it as a universal link"
-               }
-               {
-                  "/": "/help/*",
-                  "?": { "articleNumber": "????" },
-                  "comment": "Matches any URL whose path starts with /help/ and which has a query item with name 'articleNumber' and a value of exactly 4 characters"
+                  "/": "/*",
+                  "comment": "Matches any URL"
                }
              ]
            }
        ]
    },
    "webcredentials": {
-      "apps": [ "ABCDE12345.com.example.app" ]
+      "apps": [ "TXW2W532B9.org.openopus.concertino.ios" ]
    }
+}
