@@ -6,7 +6,7 @@
         "appIDs": [ "TXW2W532B9.org.openopus.concertino.ios" ],
         "appID": "TXW2W532B9.org.openopus.concertino.ios",
         "paths": [
-          "/*"
+          "*"
         ]
       }
     ]
