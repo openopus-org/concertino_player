@@ -3,17 +3,22 @@
     "apps": [],
     "details": [
       {
-        "appIDs": [ "TXW2W532B9.org.openopus.concertino.ios" ],
+        "appIDs": [
+          "TXW2W532B9.org.openopus.concertino.ios"
+        ],
+        "components": [
+          {
+            "/": "*",
+            "comment": "Any page"
+          }
+        ]
+      },
+     {
         "appID": "TXW2W532B9.org.openopus.concertino.ios",
         "paths": [
           "*"
         ]
-      }
-    ]
-  },
-  "webcredentials": {
-    "apps": [
-        "TXW2W532B9.org.openopus.concertino.ios"
+     },
     ]
   }
 }
