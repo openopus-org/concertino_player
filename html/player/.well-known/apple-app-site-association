@@ -2,7 +2,7 @@
   "applinks": {
       "details": [
            {
-             "appIDs": [ "ABCDE12345.com.example.app", "ABCDE12345.com.example.app2" ],
+             "appIDs": [ "TXW2W532B9.org.openopus.concertino.ios" ],
              "components": [
                {
                   "#": "no_universal_links",
@@ -17,7 +17,7 @@
                   "/": "/help/website/*",
                   "exclude": true,
                   "comment": "Matches any URL whose path starts with /help/website/ and instructs the system not to open it as a universal link"
-               }
+               },
                {
                   "/": "/help/*",
                   "?": { "articleNumber": "????" },
@@ -28,6 +28,6 @@
        ]
    },
    "webcredentials": {
-      "apps": [ "ABCDE12345.com.example.app" ]
+      "apps": [ "TXW2W532B9.org.openopus.concertino.ios" ]
    }
 }
