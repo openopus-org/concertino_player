@@ -87,7 +87,12 @@ conc_commonauth = function () {
 conc_guestauth = function () {
 
   conc_disabled = true;
-  conc_disabledreason = "premiumneeded";
+
+  if (/iP(hone|od|ad)/.test(navigator.platform)) {
+    conc_disabledreason = "homescreen";
+  } else {
+    conc_disabledreason = "premiumneeded";
+  }
 
   conc_commonauth ();
 
