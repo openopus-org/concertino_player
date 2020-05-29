@@ -48,12 +48,16 @@
             });
             $( document ).ready(function() {
                 setTimeout (function () {
-                    if (localStorage.user_type == 'applemusic') { 
-                        conc_appleauth();
-                    } else if (localStorage.user_type == 'guest') {
+                    if (/iP(hone|od|ad)/.test(navigator.platform)) {
                         conc_guestauth()
                     } else {
-                        $('#loader-loading').hide(0, function () { $('#loader-options').show(); });
+                        if (localStorage.user_type == 'applemusic') { 
+                            conc_appleauth();
+                        } else if (localStorage.user_type == 'guest') {
+                            conc_guestauth()
+                        } else {
+                            $('#loader-loading').hide(0, function () { $('#loader-options').show(); });
+                        }
                     }
                 }, 1 * 1000);
             });
@@ -322,14 +326,16 @@
     </div>
     <div id="mobile-safari" class="modal">
         <h2>Warning</h2>
-        <p>Playback is disabled on mobile browsers. We recommend you to use Concertino's iPhone app - it's fully functional and offers a much better experience. Free!</p>
-        <p class="modaldetails"><a href="https://apps.apple.com/br/app/concertino/id1506663568?l=en">Get it now on the App Store!</a></p>
-        <a href="javascript:$('#mobile-safari').closeModal()">Close</a>
+        <p>Playback is disabled on mobile browsers.</p>
+        <p class="modaldetails">We recommend you to use <strong>Concertino's iPhone app</strong> - it's fully functional and offers a much better experience. Free!</p>
+        <a href="https://apps.apple.com/br/app/concertino/id1506663568?l=en">Get it now on the App Store!</a>
+        <a href="javascript:$('#homescreen').closeModal()">Close</a>
     </div>
     <div id="homescreen" class="modal">
         <h2>Warning</h2>
-        <p>Playback is disabled on mobile browsers. We recommend you to use Concertino's iPhone app - it's fully functional and offers a much better experience. Free!</p>
-        <p class="modaldetails"><a href="https://apps.apple.com/br/app/concertino/id1506663568?l=en">Get it now on the App Store!</a></p>
+        <p>Playback is disabled on mobile browsers.</p>
+        <p class="modaldetails">We recommend you to use <strong>Concertino's iPhone app</strong> - it's fully functional and offers a much better experience. Free!</p>
+        <a class="appstore" href="https://apps.apple.com/br/app/concertino/id1506663568?l=en">Get it now on the App Store!</a>
         <a href="javascript:$('#homescreen').closeModal()">Close</a>
     </div>
     <div id="playlistmodal" class="modal">

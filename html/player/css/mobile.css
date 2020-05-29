@@ -1911,6 +1911,7 @@ div:not(#config).modal
 	width: 80% !important;
 }
 
+
 .modal p
 {
 	text-align: center;
@@ -1924,7 +1925,7 @@ div:not(#config).modal
     font-size: 11px !important;
 }
 
-div:not(#config).modal a, 
+div:not(#config).modal a:not(.appstore), 
 #radiotop a
 {
 	color: #FFF;
@@ -1940,6 +1941,20 @@ div:not(#config).modal a,
 	margin-left: 12px;
 	clear: left;
 	border-radius: 12px;
+}
+
+#homescreen a.appstore 
+{
+	background-repeat: no-repeat;
+    width: 120px;
+    height: 42px;
+    text-indent: -9000px;
+    overflow: hidden;
+    display: block;
+    background-image: url(../img/appstore.png);
+	background-size: 120px 42px;
+	margin: 0 auto;
+	padding-bottom: 34px;
 }
 
 .modal h2
