@@ -40,8 +40,8 @@
                 developerToken: 'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkZES0o3TE01U1QifQ.eyJpYXQiOjE1ODkyMjgyOTAsImV4cCI6MTYwNDc4MDI5MCwiaXNzIjoiVFhXMlc1MzJCOSJ9.e3UXhU-yECWqZZhsOcubI2z5mZ08HWxdIkRnGZxXEfqaqBov_Md_e6E2PAlKGPVuWVv4MbyEIXXoxsX72yqQgw',
                 app: {
                     name: 'Concertino',
-                    build: '1.20.5',
-                    version: '1.20.5',
+                    build: '1.20.5.27',
+                    version: '1.20.5.27',
                     icon: 'https://concertino.' + (window.location.hostname.split('.')[1] == 'local' ? 'local' : 'app') + '/img/icon512.png'
                 },
                 bitrate: MusicKit.PlaybackBitrate.HIGH
@@ -52,7 +52,7 @@
                         conc_appleauth();
                     } else if (localStorage.user_type == 'guest') {
                         conc_guestauth()
-                    } else { 
+                    } else {
                         $('#loader-loading').hide(0, function () { $('#loader-options').show(); });
                     }
                 }, 1 * 1000);
@@ -322,14 +322,14 @@
     </div>
     <div id="mobile-safari" class="modal">
         <h2>Warning</h2>
-        <p>Due to the way mobile Safari deals with audio playback, Concertino acts weird on iPhones, iPods and iPads. Playback might work and it's enabled, but it's currently very unstable.<br />(Apple issue, not ours. Sorry.)</p>
-        <p class="modaldetails">We're working hard to release a native iPhone app as soon as possible!</p>
+        <p>Playback is disabled on mobile browsers. We recommend you to use Concertino's iPhone app - it's fully functional and offers a much better experience. Free!</p>
+        <p class="modaldetails"><a href="https://apps.apple.com/br/app/concertino/id1506663568?l=en">Get it now on the App Store!</a></p>
         <a href="javascript:$('#mobile-safari').closeModal()">Close</a>
     </div>
     <div id="homescreen" class="modal">
-        <h2>Error</h2>
-        <p>Due to iOS limitations, playback is disabled in full screen mode (home screen icon). To enable playback, please open <strong>concertino.app</strong> on your browser.<br />(Apple issue, not ours. Sorry.)</p>
-        <p class="modaldetails">You can still browse Concertino's catalogue, create playlists, favorite works, composers and recordings, as usual.</p>
+        <h2>Warning</h2>
+        <p>Playback is disabled on mobile browsers. We recommend you to use Concertino's iPhone app - it's fully functional and offers a much better experience. Free!</p>
+        <p class="modaldetails"><a href="https://apps.apple.com/br/app/concertino/id1506663568?l=en">Get it now on the App Store!</a></p>
         <a href="javascript:$('#homescreen').closeModal()">Close</a>
     </div>
     <div id="playlistmodal" class="modal">

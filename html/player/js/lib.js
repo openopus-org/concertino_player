@@ -42,7 +42,7 @@ conc_options = {
     shareurl: 'https://' + (window.location.hostname.split('.')[0] == 'beta' ? 'beta.' : '') + 'cncert.' + (window.location.hostname.split('.').pop() == 'local' ? 'local' : 'in'),
     smartradio: JSON.parse(localStorage.smartradio),
     notshow: false,
-    version: '1.20.5' + (window.location.hostname.split('.')[0] == 'beta' ? ' beta' : ''),
+    version: '1.20.5.27' + (window.location.hostname.split('.')[0] == 'beta' ? ' beta' : ''),
     secondsEMEcert: 12 * 60,
     too_many_tracks: 24,
     no_track_labels: 15
@@ -151,9 +151,11 @@ conc_appleauth = function () {
             conc_disabled = false;
             conc_disabledreason = "";
 
-            /* detecting home screen app on iphone */
+            /* detecting iphone */
 
-            if (window.matchMedia('(display-mode: standalone)').matches && !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/)) {
+            //if ((window.matchMedia('(display-mode: standalone)').matches && !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/)) || (/iP(hone|od|ad)/.test(navigator.platform))) {
+            
+            if (/iP(hone|od|ad)/.test(navigator.platform) {
               conc_disabled = true;
               conc_disabledreason = "homescreen";
             }
@@ -1065,14 +1067,15 @@ conc_appleplay = function (tracks, offset)
     return;
   }
 
+  /*
   if ((/iP(hone|od|ad)/.test(navigator.platform)) && !localStorage.iphonewarning) {
     $('#tuning-modal').hide(0, function () { $("#mobile-safari").leanModal(); });
-    localStorage.iphonewarning = true;
     iphonewarning = true;
   }
   else {
     iphonewarning = false;
   }
+  */
 
   applemusic = MusicKit.getInstance();
 
@@ -1088,7 +1091,8 @@ conc_appleplay = function (tracks, offset)
     applemusic.changeToMediaAtIndex(offset).
       catch(function () { conc_notavailable (); });
 
-    if (!iphonewarning) $('#tuning-modal').closeModal();
+    //if (!iphonewarning) 
+    $('#tuning-modal').closeModal();
     
   }).catch(function () { conc_notavailable (); });  
 }
