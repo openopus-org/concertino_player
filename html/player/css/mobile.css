@@ -1903,6 +1903,11 @@ div:not(#config).modal
     transform: translate(-50%, -50%);
 }
 
+div#homescreen.modal 
+{
+	width: 70%;
+}
+
 #playlistmodal,
 #editplaylistmodal,
 #premiumneeded,
@@ -1946,13 +1951,13 @@ div:not(#config).modal a:not(.appstore),
 #homescreen a.appstore 
 {
 	background-repeat: no-repeat;
-    width: 120px;
-    height: 42px;
+    width: 144px;
+    height: 50px;
     text-indent: -9000px;
     overflow: hidden;
     display: block;
     background-image: url(../img/appstore.png);
-	background-size: 120px 42px;
+	background-size: 144px 50px;
 	margin: 0 auto;
 	padding-bottom: 34px;
 }
