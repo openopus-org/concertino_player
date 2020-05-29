@@ -150,61 +150,67 @@ conc_appleauth = function () {
     // retrieves the first recommendation as user identifier (since Apple doesn't provide any id aside temp tokens)
 
     applemusic.api.recommendations().then(function (response) { 
-      
-      $.ajax ({
-        url: conc_options.backend + '/dyn/user/login/',
-        method: "POST",
-        data: { auth: conc_authgen(), id: localStorage.user_id, recid: response[0].id },
-        success: function(response)
-        {
-          if (response.status.success == "true")
-          {
-            conc_disabled = false;
-            conc_disabledreason = "";
-
-            /* detecting iphone */
-
-            //if ((window.matchMedia('(display-mode: standalone)').matches && !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/)) || (/iP(hone|od|ad)/.test(navigator.platform))) {
-            
-            if (/iP(hone|od|ad)/.test(navigator.platform)) {
-              conc_disabled = true;
-              conc_disabledreason = "homescreen";
-            }
-
-            localStorage.user_type = 'applemusic';
-            localStorage.user_id = response.user.id;
-            if (response.user.auth) localStorage.user_auth = response.user.auth;
-  
-            conc_init();
-            conc_showplayerbar();
-  
-            if (localStorage.lastwid) {
-              conc_recording(localStorage.lastwid, localStorage.lastaid, localStorage.lastset, (window.location.search != "?play"));
-            }
-  
-            applemusic.addEventListener('playbackTimeDidChange', function () { conc_slider ({id: (applemusic.player.nowPlayingItem ? applemusic.player.nowPlayingItem.id : 0), duration: applemusic.player.currentPlaybackDuration, position: applemusic.player.currentPlaybackTime }); });
-            applemusic.addEventListener('playbackStateDidChange', function () { conc_state (applemusic.player.playbackState); });
-            applemusic.addEventListener('mediaCanPlay', function () { 
-              if (conc_seek) {
-                applemusic.player.volume = 0;
-                conc_seekto = conc_seek;
-                conc_seek = 0;
-                setTimeout (function () { applemusic.player.seekToTime (conc_seekto+1).then(function () { applemusic.player.volume = 1; }); }, 5000);
-              } 
-            });
-
-            applechecking = setInterval(conc_checkplayer, 150000);
-            
-            $('#loader').fadeOut();
-          }
-          else
-          {
-             // do something if login fails
-          }
-        }
-      });      
+      conc_appleauth_common (response[0].id);
+    }, function (error) {
+      conc_appleauth_common ('temp-' + ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)));
     });
   });
+}
+
+conc_appleauth_common = function (id)
+{
+  $.ajax ({
+    url: conc_options.backend + '/dyn/user/login/',
+    method: "POST",
+    data: { auth: conc_authgen(), id: localStorage.user_id, recid: id },
+    success: function(response)
+    {
+      if (response.status.success == "true")
+      {
+        conc_disabled = false;
+        conc_disabledreason = "";
+
+        /* detecting iphone */
+
+        //if ((window.matchMedia('(display-mode: standalone)').matches && !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/)) || (/iP(hone|od|ad)/.test(navigator.platform))) {
+        
+        if (/iP(hone|od|ad)/.test(navigator.platform)) {
+          conc_disabled = true;
+          conc_disabledreason = "homescreen";
+        }
+
+        localStorage.user_type = 'applemusic';
+        localStorage.user_id = response.user.id;
+        if (response.user.auth) localStorage.user_auth = response.user.auth;
+
+        conc_init();
+        conc_showplayerbar();
+
+        if (localStorage.lastwid) {
+          conc_recording(localStorage.lastwid, localStorage.lastaid, localStorage.lastset, (window.location.search != "?play"));
+        }
+
+        applemusic.addEventListener('playbackTimeDidChange', function () { conc_slider ({id: (applemusic.player.nowPlayingItem ? applemusic.player.nowPlayingItem.id : 0), duration: applemusic.player.currentPlaybackDuration, position: applemusic.player.currentPlaybackTime }); });
+        applemusic.addEventListener('playbackStateDidChange', function () { conc_state (applemusic.player.playbackState); });
+        applemusic.addEventListener('mediaCanPlay', function () { 
+          if (conc_seek) {
+            applemusic.player.volume = 0;
+            conc_seekto = conc_seek;
+            conc_seek = 0;
+            setTimeout (function () { applemusic.player.seekToTime (conc_seekto+1).then(function () { applemusic.player.volume = 1; }); }, 5000);
+          } 
+        });
+
+        applechecking = setInterval(conc_checkplayer, 150000);
+        
+        $('#loader').fadeOut();
+      }
+      else
+      {
+         // do something if login fails
+      }
+    }
+  }); 
 }
 
 conc_toggleplay = function ()
