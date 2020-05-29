@@ -128,6 +128,8 @@ conc_logout = function () {
 
 conc_appleauth = function () {
 
+  if (/iP(hone|od|ad)/.test(navigator.platform)) return false;
+  
   conc_commonauth ();
 
   // removing guest info - not ideal, but it's supposed that guest accounts = throwaway accounts
