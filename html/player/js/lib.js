@@ -155,7 +155,7 @@ conc_appleauth = function () {
 
             //if ((window.matchMedia('(display-mode: standalone)').matches && !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/)) || (/iP(hone|od|ad)/.test(navigator.platform))) {
             
-            if (/iP(hone|od|ad)/.test(navigator.platform) {
+            if (/iP(hone|od|ad)/.test(navigator.platform)) {
               conc_disabled = true;
               conc_disabledreason = "homescreen";
             }
