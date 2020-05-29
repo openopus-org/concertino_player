@@ -128,8 +128,12 @@ conc_logout = function () {
 
 conc_appleauth = function () {
 
-  if (/iP(hone|od|ad)/.test(navigator.platform)) return false;
-  
+  if (/iP(hone|od|ad)/.test(navigator.platform)) {
+    $('#homescreen').leanModal()
+
+    return false;
+  }
+
   conc_commonauth ();
 
   // removing guest info - not ideal, but it's supposed that guest accounts = throwaway accounts
