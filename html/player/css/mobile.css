@@ -1903,7 +1903,7 @@ div:not(#config).modal
     transform: translate(-50%, -50%);
 }
 
-div#homescreen.modal 
+div#homescreen.modal, div#mobile-safari.modal
 {
 	width: 70%;
 }
@@ -1948,7 +1948,7 @@ div:not(#config).modal a:not(.appstore),
 	border-radius: 12px;
 }
 
-#homescreen a.appstore 
+#homescreen a.appstore, #mobile-safari a.appstore
 {
 	background-repeat: no-repeat;
     width: 144px;
