@@ -42,7 +42,7 @@ conc_options = {
     shareurl: 'https://' + (window.location.hostname.split('.')[0] == 'beta' ? 'beta.' : '') + 'cncert.' + (window.location.hostname.split('.').pop() == 'local' ? 'local' : 'in'),
     smartradio: JSON.parse(localStorage.smartradio),
     notshow: false,
-    version: '1.20.5.27' + (window.location.hostname.split('.')[0] == 'beta' ? ' beta' : ''),
+    version: '1.20.8.18' + (window.location.hostname.split('.')[0] == 'beta' ? ' beta' : ''),
     secondsEMEcert: 12 * 60,
     too_many_tracks: 24,
     no_track_labels: 15
