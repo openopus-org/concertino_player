@@ -175,7 +175,8 @@ conc_appleauth_common = function (id)
 
         //if ((window.matchMedia('(display-mode: standalone)').matches && !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/)) || (/iP(hone|od|ad)/.test(navigator.platform))) {
         
-        if (/iP(hone|od|ad)/.test(navigator.platform)) {
+        if ((/iP(hone|od|ad)/.test(navigator.platform) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
+          !window.MSStream) {
           conc_disabled = true;
           conc_disabledreason = "homescreen";
         }
