@@ -88,7 +88,8 @@ conc_guestauth = function () {
 
   conc_disabled = true;
 
-  if (/iP(hone|od|ad)/.test(navigator.platform)) {
+  if ((/iP(hone|od|ad)/.test(navigator.platform) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
+  !window.MSStream) {
     conc_disabledreason = "homescreen";
   } else {
     conc_disabledreason = "premiumneeded";
@@ -828,6 +829,7 @@ conc_recordingsbywork = function (work, offset)
           if (docsr[performance].compilation == "true") {
             if (!conc_options.compilations) {
               notshow = true;
+              console.log('compilacao!');
             }
           }
 
@@ -844,6 +846,8 @@ conc_recordingsbywork = function (work, offset)
 
           if (!notshow && !$("ul#albums." + list.work.id + " li[pid=" + list.work.id + '-' + docsr[performance].apple_albumid + '-' + docsr[performance].set + "]").length) {
             $(listul).append('<li pid="' + list.work.id + '-' + docsr[performance].apple_albumid + '-' + docsr[performance].set + '" ' + pidsort + ' class="performance ' + draggable + ' ' + extraclass + '" title="'+ extratitle + '"><ul>' + conc_recordingitem(docsr[performance], list.work) + '</ul></li>');
+          } else {
+            console.log(docsr[performance].apple_albumid + ' - ja tinha!');
           }
         }
 
