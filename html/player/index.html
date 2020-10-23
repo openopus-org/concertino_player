@@ -33,7 +33,21 @@
     <script src="/js/js-md5.js"></script>
     <script type="text/javascript" src="/js/lib.js"></script>
     <script src="https://js-cdn.music.apple.com/musickit/v1/musickit.js"></script>
+    <script type="text/javascript" src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
 
+    <script>
+        AppleID.auth.init({
+            clientId : 'app.concertino.web',
+            scope : 'name',
+            redirectURI : 'https://' + window.location.hostname + '/signin',
+            usePopup : true
+        });
+
+        document.addEventListener('AppleIDSignInOnSuccess', (data) => {
+            user = JSON.parse(atob(data.detail.authorization.id_token.split('.')[1]))
+            conc_usersync(user.sub)
+        });
+    </script>
     <script>
         document.addEventListener('musickitloaded', function () {
             MusicKit.configure({
@@ -389,12 +403,18 @@
             <li><div id="toggle_historic" class="toggle"></div>Hide old, historical recordings</li>
         </ul>
         <div id="signout">
-            <h3>Sign out</h3>
-            <a href="javascript:conc_logout()">Logout from Apple Music</a>        
+            <h3>Disable playback</h3>
+            <a href="javascript:conc_logout()">Disconnect from Apple Music</a>        
         </div>
         <div id="signin">
-            <h3>Log in</h3>
-            <a href="javascript:conc_appleauth()">Log in to Apple Music</a>        
+            <h3>Enable playback</h3>
+            <a href="javascript:conc_appleauth()">Connect to Apple Music</a>        
+        </div>
+        <div id="devicesync">
+            <h3>Device sync</h3>
+            <h4>Sign in to have your favorites, playlists and playing history synchronized between multiple devices.</h4>
+            <p id="notsignedin"><a href="javascript:AppleID.auth.signIn()"><img src="https://appleid.cdn-apple.com/appleid/button?scale=6&color=white" /></a></p>
+            <p id="signedin">Logged-in, devices synced!</p>
         </div>
 
         <!--<h3 class="smartradio">Smart radio</h3>

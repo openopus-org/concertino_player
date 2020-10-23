@@ -2154,7 +2154,7 @@ body.windows #radiotop a
 	text-transform: uppercase;
 	width: 120px;
 	margin-left: 12px;
-	clear: left;
+	clear: both;
 	border-radius: 12px;
 }
 
@@ -2820,8 +2820,7 @@ li.emptylist p {
     margin-top: 2px;
     display: inline-block;
 	color: #FFFFFF;
-	
-	width: inherit;
+	width: 60%;
     float: none;
     background-color: inherit;
     font-family: inherit;
@@ -2855,8 +2854,73 @@ body.showingplayerbar #config #signin {
 	display: none;
 }
 
-#signout h3, #signin h3 {
+#signin, #signout {
+	float: left;
+	width: 50%;
+}
+
+#signout h3, #signin h3, #devicesync h3 {
     margin-top: 22px;
+}
+
+#devicesync {
+	float: right;
+	width: 45%;
+}
+
+#devicesync p {
+	padding: 0;
+	text-align: left;
+	margin-top: 0;
+}
+
+#devicesync #signedin {
+	background-repeat: no-repeat;
+    background-image: url(../img/check-on.png);
+    background-size: 18px;
+    font-size: 15px;
+    padding-left: 26px;
+    margin-top: 20px;
+}
+
+#devicesync h4 {
+	margin-bottom: 12px !important;
+	font-size: 11px;
+}
+
+#devicesync a {
+	float: none;
+    padding: 0;
+	margin: 0;
+	color: none;
+	padding: 0;
+	margin: 0;
+}
+
+#devicesync a:hover {
+	background: none;
+	padding: 0;
+	margin: 0;
+}
+
+#devicesync a img {
+	width: 120%;
+}
+
+#devicesync #notsignedin {
+	display: block;
+}
+
+#devicesync #signedin {
+	display: none;
+}
+
+#devicesync.signedin #notsignedin {
+	display: none;
+}
+
+#devicesync.signedin #signedin {
+	display: block;
 }
 
 #favalbumswrapper #nofavorites {
@@ -2895,7 +2959,7 @@ body.showingplayerbar #config #signin {
 }
 
 #about h2, #patrons h2 {
-	margin-top: 20px;
+	margin-top: 28px;
 	margin-bottom: 2px;
 }
 
@@ -2918,7 +2982,7 @@ body.showingplayerbar #config #signin {
 }
 
 #patrons ul {
-	height: 200px;
+	height: 160px;
 	overflow: auto;
 }
 

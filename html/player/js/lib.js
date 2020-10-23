@@ -42,7 +42,7 @@ conc_options = {
     shareurl: 'https://' + (window.location.hostname.split('.')[0] == 'beta' ? 'beta.' : '') + 'cncert.' + (window.location.hostname.split('.').pop() == 'local' ? 'local' : 'in'),
     smartradio: JSON.parse(localStorage.smartradio),
     notshow: false,
-    version: '1.20.8.18.16' + (window.location.hostname.split('.')[0] == 'beta' ? ' beta' : ''),
+    version: '1.20.1022' + (window.location.hostname.split('.')[0] == 'beta' ? ' beta' : ''),
     secondsEMEcert: 12 * 60,
     too_many_tracks: 24,
     no_track_labels: 15
@@ -150,11 +150,11 @@ conc_appleauth = function () {
 
     // retrieves the first recommendation as user identifier (since Apple doesn't provide any id aside temp tokens)
 
-    applemusic.api.recommendations().then(function (response) { 
+    /*applemusic.api.recommendations().then(function (response) { 
       conc_appleauth_common (response[0].id);
-    }, function (error) {
+    }, function (error) {*/
       conc_appleauth_common ('temp-' + ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)));
-    });
+    //});
   });
 }
 
@@ -744,7 +744,7 @@ conc_works = function (response)
     }
 
     //docsw[work].title = docsw[work].title.replace(/\"/g, "");
-    $('#works').append('<li><a href="javascript:conc_favoritework(\'' + docsw[work].id + '\',\'' + list.composer.id + '\')" class="wfav wfav_' + docsw[work].id + ' ' + favorite + '">fav</a><a href="javascript:conc_recordingsbywork(' + docsw[work].id + ',0);">' + docsw[work].title + '<span>' + docsw[work].subtitle + ' </span></a></li>');
+    $('#works').append('<li><a href="javascript:conc_favoritework(\'' + docsw[work].id + '\',\'' + list.composer.id + '\')" class="wfav wfav_' + docsw[work].id + ' ' + favorite + '">fav</a><a href="javascript:conc_recordingsbywork(\'' + docsw[work].id + '\',0);">' + docsw[work].title + '<span>' + docsw[work].subtitle + ' </span></a></li>');
 
     lastrec = docsw[work].recommended;
     lastgenre = docsw[work].genre;
@@ -758,6 +758,8 @@ conc_works = function (response)
 
 conc_recordingsbywork = function (work, offset)
 {
+  if (work.includes('at*')) return false;
+
   $('#worksearch').val('');
   window.albumlistwork = work;
   window.albumlistoffset = offset;
@@ -830,7 +832,7 @@ conc_recordingsbywork = function (work, offset)
           if (docsr[performance].compilation == "true") {
             if (!conc_options.compilations) {
               notshow = true;
-              console.log('compilacao!');
+              //console.log('compilacao!');
             }
           }
 
@@ -845,10 +847,10 @@ conc_recordingsbywork = function (work, offset)
             extratitle = "Verified recording";
           }
 
-          if (!notshow && !$("ul#albums." + list.work.id + " li[pid=" + list.work.id + '-' + docsr[performance].apple_albumid + '-' + docsr[performance].set + "]").length) {
-            $(listul).append('<li pid="' + list.work.id + '-' + docsr[performance].apple_albumid + '-' + docsr[performance].set + '" ' + pidsort + ' class="performance ' + draggable + ' ' + extraclass + '" title="'+ extratitle + '"><ul>' + conc_recordingitem(docsr[performance], list.work) + '</ul></li>');
+          if (!notshow && !$("ul#albums." + list.work.id + " li[pid=" + list.work.id.replace(/\*/g,'-') + '-' + docsr[performance].apple_albumid + '-' + docsr[performance].set + "]").length) {
+            $(listul).append('<li pid="' + list.work.id.replace(/\*/g,'-') + '-' + docsr[performance].apple_albumid + '-' + docsr[performance].set + '" ' + pidsort + ' class="performance ' + draggable + ' ' + extraclass + '" title="'+ extratitle + '"><ul>' + conc_recordingitem(docsr[performance], list.work) + '</ul></li>');
           } else {
-            console.log(docsr[performance].apple_albumid + ' - ja tinha!');
+            //console.log(docsr[performance].apple_albumid + ' - ja tinha!');
           }
         }
 
@@ -971,17 +973,17 @@ conc_recordingaction = function (list, auto)
         pform.push (list.recording.performers[i].name + (list.recording.performers[i].role != '' && list.recording.performers[i].role != 'Orchestra' && list.recording.performers[i].role != 'Ensemble' && list.recording.performers[i].role != 'Choir' ? ', ' + list.recording.performers[i].role : ''));
       }
       
-      verify += '<li class="perform"><a href="javascript:conc_editperformers();conc_qualify();">Thanks for your collaboration! Edit the performers in the field below. One per line. Specify their roles (instrument, voice etc) after commas.</a><textarea>'+pform.join('\n')+'</textarea><a class="submit" href="javascript:conc_submitperf(' + list.work.id + ',\'' + list.recording.apple_albumid + '\',' + list.recording.set + ')">Done</a></li>';
-      verify += '<li class="versionform"><a href="javascript:conc_editobs();conc_qualify();">Thanks for your help! Specify below which version of the work this recording uses, including instrumentation and author, if not the composer</a><textarea>'+list.work.subtitle+'</textarea><a class="submit" href="javascript:conc_submitobs(' + list.work.id + ',\'' + list.recording.apple_albumid + '\',' + list.recording.set + ')">Done</a></li>';
+      verify += '<li class="perform"><a href="javascript:conc_editperformers();conc_qualify();">Thanks for your collaboration! Edit the performers in the field below. One per line. Specify their roles (instrument, voice etc) after commas.</a><textarea>'+pform.join('\n')+'</textarea><a class="submit" href="javascript:conc_submitperf(\'' + list.work.id + '\',\'' + list.recording.apple_albumid + '\',' + list.recording.set + ')">Done</a></li>';
+      verify += '<li class="versionform"><a href="javascript:conc_editobs();conc_qualify();">Thanks for your help! Specify below which version of the work this recording uses, including instrumentation and author, if not the composer</a><textarea>'+list.work.subtitle+'</textarea><a class="submit" href="javascript:conc_submitobs(\'' + list.work.id + '\',\'' + list.recording.apple_albumid + '\',' + list.recording.set + ')">Done</a></li>';
 
       verify += '<li class="tagloading">loading</li>';
-      verify += '<li class="button verify"><a href="javascript:conc_rectag(' + list.work.id + ',\'' + list.recording.apple_albumid + '\',' + list.recording.set + ',\'verified\',1)"><strong>Everything OK!</strong>Metadata are correct and the recording is complete</a></li>';
+      verify += '<li class="button verify"><a href="javascript:conc_rectag(\'' + list.work.id + '\',\'' + list.recording.apple_albumid + '\',' + list.recording.set + ',\'verified\',1)"><strong>Everything OK!</strong>Metadata are correct and the recording is complete</a></li>';
       verify += '<li class="button edit"><a href="javascript:conc_editperformers()"><strong>Complete but missing information</strong>Recording is complete but data on performers is lacking</a></li>';
-      verify += '<li class="button partial"><a href="javascript:conc_rectag(' + list.work.id + ',\'' + list.recording.apple_albumid + '\',' + list.recording.set + ',\'compilation\',1)"><strong>Correct but incomplete</strong>Metadata are correct but the recording is missing movements</a></li>';
+      verify += '<li class="button partial"><a href="javascript:conc_rectag(\'' + list.work.id + '\',\'' + list.recording.apple_albumid + '\',' + list.recording.set + ',\'compilation\',1)"><strong>Correct but incomplete</strong>Metadata are correct but the recording is missing movements</a></li>';
       verify += '<li class="button version"><a href="javascript:conc_editobs()"><strong>Correct but a different version</strong>Not the original work - it\'s an arrangement or adaptation</a></li>';
       
-      verify += '<li class="button wrongdata"><a href="javascript:conc_rectag(' + list.work.id + ',\'' + list.recording.apple_albumid + '\',' + list.recording.set + ',\'wrongdata\',1)"><strong>Wrong work</strong>The description doesn\'t match the recording</a></li>';
-      verify += '<li class="button badquality"><a href="javascript:conc_rectag(' + list.work.id + ',\'' + list.recording.apple_albumid + '\',' + list.recording.set + ',\'badquality\',1)"><strong>Bad quality recording</strong>This isn\'t a real recording - it\'s played by a computer</a></li>';
+      verify += '<li class="button wrongdata"><a href="javascript:conc_rectag(\'' + list.work.id + '\',\'' + list.recording.apple_albumid + '\',' + list.recording.set + ',\'wrongdata\',1)"><strong>Wrong work</strong>The description doesn\'t match the recording</a></li>';
+      verify += '<li class="button badquality"><a href="javascript:conc_rectag(\'' + list.work.id + '\',\'' + list.recording.apple_albumid + '\',' + list.recording.set + ',\'badquality\',1)"><strong>Bad quality recording</strong>This isn\'t a real recording - it\'s played by a computer</a></li>';
 
       $('#playerverify').html(verify);
       $('#playerverify').removeClass('reported').toggleClass('verified', (list.recording.verified == 'true'));
@@ -1033,10 +1035,18 @@ conc_recordingaction = function (list, auto)
         localStorage.lastwid = list.work.id;
         localStorage.lastaid = list.recording.apple_albumid;
         localStorage.lastset = list.recording.set;
+
+        data = { id: localStorage.user_id, wid: list.work.id, aid: list.recording.apple_albumid, set: list.recording.set, cover: list.recording.cover, performers: JSON.stringify(list.recording.performers), auth: conc_authgen() };
+      
+        if (list.work.id.includes('at*')) {
+          data["work"] = list.work.title;
+          data["composer"] = list.work.composer.name;
+        }
+
         $.ajax({
           url: conc_options.backend + '/dyn/user/recording/played/',
           method: "POST",
-          data: { id: localStorage.user_id, wid: list.work.id, aid: list.recording.apple_albumid, set: list.recording.set, cover: list.recording.cover, performers: JSON.stringify(list.recording.performers), auth: conc_authgen() },
+          data: data,
           success: function (response) {
             if ($('#favtitle select option:checked').val() == 'rec') {
               conc_recentrecordings();
@@ -1129,12 +1139,12 @@ conc_recordingitem = function (item, work, playlist)
 
   alb = '';
 
-  alb = alb + '<li class="cover"><a href="javascript:conc_thisrecording(\'' + item.apple_albumid +'\','+work.id+','+item.set+')">';
+  alb = alb + '<li class="cover"><a href="javascript:conc_thisrecording(\'' + item.apple_albumid +'\',\''+work.id+'\','+item.set+')">';
   alb = alb + '<img src="' + item.cover + '" onerror="this.src=\'/img/nocover.png\'" />';
   alb = alb + '<div class="overlay"></div></a></li>';
 
   alb = alb+'<li class="composer"><a href="javascript:conc_genresbycomposer('+work.composer.id+')">'+work.composer.name+'</a></li>';
-  alb = alb + '<li class="work"><a href="javascript:conc_recordingsbywork(' + work.id + ',0)">' + work.title +'<span>' + work.subtitle + '</span></a></li>';
+  alb = alb + '<li class="work"><a href="javascript:conc_recordingsbywork(\'' + work.id + '\',0)">' + work.title +'<span>' + work.subtitle + '</span></a></li>';
   if (item.observation) alb = alb + '<li class="version">' + item.observation + '</li>';
 
   var apple_link = 'https://geo.music.apple.com/us/album/-/' + item.apple_albumid;
@@ -1153,28 +1163,28 @@ conc_recordingitem = function (item, work, playlist)
 
   if ($.inArray(rid, conc_favorites) != -1)
   {
-    alb = alb + '<li class="favorite"><a href="javascript:conc_recfavorite(' + work.id + ',\'' + item.apple_albumid + '\',' + item.set + ')" class="is fav_' + rid + '">unfavorite</a></li>';
+    alb = alb + '<li class="favorite"><a href="javascript:conc_recfavorite(\'' + work.id + '\',\'' + item.apple_albumid + '\',' + item.set + ')" class="is fav_' + rid.replace(/\*/g,'-') + '">unfavorite</a></li>';
   }
   else
   {
-    alb = alb + '<li class="favorite"><a href="javascript:conc_recfavorite(' + work.id + ',\'' + item.apple_albumid + '\',' + item.set + ')" class="go fav_' + rid + '">favorite</a></li>';
+    alb = alb + '<li class="favorite"><a href="javascript:conc_recfavorite(\'' + work.id + '\',\'' + item.apple_albumid + '\',' + item.set + ')" class="go fav_' + rid.replace(/\*/g,'-') + '">favorite</a></li>';
   }
 
-  alb = alb + '<li class="permalink"><a href="javascript:conc_permalink(' + work.id + ',\'' + item.apple_albumid + '\',' + item.set + ')">permalink</a></li>';
+  alb = alb + '<li class="permalink"><a href="javascript:conc_permalink(\'' + work.id + '\',\'' + item.apple_albumid + '\',' + item.set + ')">permalink</a></li>';
   
   if (playlist) {
     if (playlist.owner.id == localStorage.user_id) {
       plaction = 'unplaylist';
-      plfunction = 'conc_unplaylistperformance(' + work.id + ',\'' + item.apple_albumid + '\',' + item.set + ',' + playlist.id + ')';
+      plfunction = 'conc_unplaylistperformance(\'' + work.id + '\',\'' + item.apple_albumid + '\',' + item.set + ',' + playlist.id + ')';
     }
     else {
       plaction = 'doplaylist';
-      plfunction = 'conc_playlistmodal(' + work.id + ',\'' + item.apple_albumid + '\',' + item.set + ')';
+      plfunction = 'conc_playlistmodal(\'' + work.id + '\',\'' + item.apple_albumid + '\',' + item.set + ',\'' + work.title + '\',\'' + work.composer.name + '\')';
     }
   }
   else {
     plaction = 'doplaylist';
-    plfunction = 'conc_playlistmodal(' + work.id + ',\'' + item.apple_albumid + '\',' + item.set + ')';
+    plfunction = 'conc_playlistmodal(\'' + work.id + '\',\'' + item.apple_albumid + '\',' + item.set + ',\'' + work.title + '\',\'' + work.composer.name + '\')';
   }
 
   alb = alb + '<li class="playlist '+ plaction +'"><a href="javascript:'+ plfunction +'">playlist</a></li>';
@@ -1327,14 +1337,14 @@ conc_rectag = function (wid, aid, set, tag, value) {
               if (tag == 'verified' || tag == 'compilation') {
                 $('#playerverify').toggleClass('verified', true);
                 if (window.albumlistwork == wid) {
-                  $('#albums li[pid=' + wid + '-' + aid + '-' + set + ']').show();
-                  $('#albums li[pid=' + wid + '-' + aid + '-' + set + ']').toggleClass('verified', true);
-                  $('#albums li[pid=' + wid + '-' + aid + '-' + set + ']').parent().prepend($('#albums li[pid=' + wid + '-' + aid + '-' + set + ']'));
+                  $('#albums li[pid=' + wid.replace(/\*/g,'-') + '-' + aid + '-' + set + ']').show();
+                  $('#albums li[pid=' + wid.replace(/\*/g,'-') + '-' + aid + '-' + set + ']').toggleClass('verified', true);
+                  $('#albums li[pid=' + wid.replace(/\*/g,'-') + '-' + aid + '-' + set + ']').parent().prepend($('#albums li[pid=' + wid.replace(/\*/g,'-') + '-' + aid + '-' + set + ']'));
                 }
               }
               else if (tag == 'wrongdata' || tag == 'badquality') {
                 $('#playerverify').toggleClass('reported', true);
-                if (window.albumlistwork == wid) $('#albums li[pid=' + wid + '-' + aid + '-' + set + ']').hide();
+                if (window.albumlistwork == wid) $('#albums li[pid=' + wid.replace(/\*/g,'-') + '-' + aid + '-' + set + ']').hide();
               }
             }
           }
@@ -1377,10 +1387,10 @@ conc_submitperf = function (wid, aid, set) {
               $('#nowplaying li.performers ul').html(conc_listperformers(response.recording.performers));
 
               if (window.albumlistwork == wid) {
-                $('#albums li[pid=' + wid + '-' + aid + '-' + set + ']').show();
-                $('#albums li[pid=' + wid + '-' + aid + '-' + set + '] li.performers').html(conc_listperformers(response.recording.performers));
-                $('#albums li[pid=' + wid + '-' + aid + '-' + set + ']').toggleClass('verified', true);
-                $('#albums li[pid=' + wid + '-' + aid + '-' + set + ']').parent().prepend($('#albums li[pid=' + wid + '-' + aid + '-' + set + ']'));
+                $('#albums li[pid=' + wid.replace(/\*/g,'-') + '-' + aid + '-' + set + ']').show();
+                $('#albums li[pid=' + wid.replace(/\*/g,'-') + '-' + aid + '-' + set + '] li.performers').html(conc_listperformers(response.recording.performers));
+                $('#albums li[pid=' + wid.replace(/\*/g,'-') + '-' + aid + '-' + set + ']').toggleClass('verified', true);
+                $('#albums li[pid=' + wid.replace(/\*/g,'-') + '-' + aid + '-' + set + ']').parent().prepend($('#albums li[pid=' + wid + '-' + aid + '-' + set + ']'));
               }
             }
           }
@@ -1418,14 +1428,14 @@ conc_submitobs = function (wid, aid, set) {
             $('#playerverify').toggleClass('verified', true);
             $('#playerverify').toggleClass('opened', false);
 
-            $('#nowplaying li.work').html('<a href="javascript:conc_recordingsbywork(' + response.work.id + ',0)">' + response.work.title +'<span>' + rresponse.recording.observation + '</span></a>');
+            $('#nowplaying li.work').html('<a href="javascript:conc_recordingsbywork(\'' + response.work.id + '\',0)">' + response.work.title +'<span>' + rresponse.recording.observation + '</span></a>');
 
             if (window.albumlistwork == wid) {
-              $('#albums li[pid=' + wid + '-' + aid + '-' + set + ']').show();
-              $('#albums li[pid=' + wid + '-' + aid + '-' + set + '] li.version').remove();
-              if (rresponse.recording.observation) $('<li class="version">'+rresponse.recording.observation+'</li>').insertBefore('#albums li[pid=' + wid + '-' + aid + '-' + set + '] li.performers');
-              $('#albums li[pid=' + wid + '-' + aid + '-' + set + ']').toggleClass('verified', true);
-              $('#albums li[pid=' + wid + '-' + aid + '-' + set + ']').parent().prepend($('#albums li[pid=' + wid + '-' + aid + '-' + set + ']'));
+              $('#albums li[pid=' + wid.replace(/\*/g,'-') + '-' + aid + '-' + set + ']').show();
+              $('#albums li[pid=' + wid.replace(/\*/g,'-') + '-' + aid + '-' + set + '] li.version').remove();
+              if (rresponse.recording.observation) $('<li class="version">'+rresponse.recording.observation+'</li>').insertBefore('#albums li[pid=' + wid.replace(/\*/g,'-') + '-' + aid + '-' + set + '] li.performers');
+              $('#albums li[pid=' + wid.replace(/\*/g,'-') + '-' + aid + '-' + set + ']').toggleClass('verified', true);
+              $('#albums li[pid=' + wid.replace(/\*/g,'-') + '-' + aid + '-' + set + ']').parent().prepend($('#albums li[pid=' + wid.replace(/\*/g,'-') + '-' + aid + '-' + set + ']'));
             }
           }
         }
@@ -1454,20 +1464,27 @@ conc_recfavorite = function (wid, aid, set)
     method: "GET",
     success: function (response) {
 
+      data = { id: localStorage.user_id, wid: wid, aid: aid, set: set, cover: response.recording.cover, performers: JSON.stringify(response.recording.performers), auth: conc_authgen() };
+      
+      if (wid.includes('at*')) {
+        data["work"] = response.work.title;
+        data["composer"] = response.work.composer.name;
+      }
+
       $.ajax({
         url: conc_options.backend + '/dyn/user/recording/' + action + '/',
         method: "POST",
-        data: { id: localStorage.user_id, wid: wid, aid: aid, set: set, cover: response.recording.cover, performers: JSON.stringify(response.recording.performers), auth: conc_authgen() },
+        data: data,
         success: function (response) {
           if (response.status.success == "true") {
             
             if (action == 'favorite') {
-              $('.fav_' + rid).removeClass('go');
-              $('.fav_' + rid).addClass('is');
+              $('.fav_' + rid.replace(/\*/g,'-')).removeClass('go');
+              $('.fav_' + rid.replace(/\*/g,'-')).addClass('is');
             }
             else {
-              $('.fav_' + rid).removeClass('is');
-              $('.fav_' + rid).addClass('go');
+              $('.fav_' + rid.replace(/\*/g,'-')).removeClass('is');
+              $('.fav_' + rid.replace(/\*/g,'-')).addClass('go');
             }
 
             if (action == 'favorite' || $('#favtitle select').val() == "fav") {
@@ -1561,7 +1578,7 @@ conc_favoriterecordings = function ()
         $('#favalbumswrapper').removeClass('nofavorites');
       
         for (performance in docsr) {
-          $(listul).append('<li pid="' + docsr[performance].work.id + '-' + docsr[performance].apple_albumid + '-' + docsr[performance].set + '" ' + pidsort + ' class="performance ' + draggable + '"><ul>' + conc_recordingitem(docsr[performance], docsr[performance].work) + '</ul></li>');
+          $(listul).append('<li pid="' + docsr[performance].work.id.replace(/\*/g,'-') + '-' + docsr[performance].apple_albumid + '-' + docsr[performance].set + '" ' + pidsort + ' class="performance ' + draggable + '"><ul>' + conc_recordingitem(docsr[performance], docsr[performance].work) + '</ul></li>');
         }
       }
     }
@@ -1581,7 +1598,7 @@ conc_recentrecordings = function () {
       $('#favalbumswrapper').removeClass('nofavorites');
 
       for (performance in docsr) {
-        $(listul).append('<li pid="' + docsr[performance].work.id + '-' + docsr[performance].apple_albumid + '-' + docsr[performance].set + '" class="performance"><ul>' + conc_recordingitem(docsr[performance], docsr[performance].work) + '</ul></li>');
+        $(listul).append('<li pid="' + docsr[performance].work.id.replace(/\*/g,'-') + '-' + docsr[performance].apple_albumid + '-' + docsr[performance].set + '" class="performance"><ul>' + conc_recordingitem(docsr[performance], docsr[performance].work) + '</ul></li>');
       }
     }
   });
@@ -1606,7 +1623,7 @@ conc_playlistrecordings = function (pid) {
         $('#favalbumswrapper').removeClass('nofavorites');
 
         for (performance in docsr) {
-          $(listul).append('<li pid="' + docsr[performance].work.id + '-' + docsr[performance].apple_albumid + '-' + docsr[performance].set + '" class="performance"><ul>' + conc_recordingitem(docsr[performance], docsr[performance].work, response.playlist) + '</ul></li>');
+          $(listul).append('<li pid="' + docsr[performance].work.id.replace(/\*/g,'-') + '-' + docsr[performance].apple_albumid + '-' + docsr[performance].set + '" class="performance"><ul>' + conc_recordingitem(docsr[performance], docsr[performance].work, response.playlist) + '</ul></li>');
         }
       }
     }
@@ -1737,7 +1754,7 @@ conc_playlist = function (playlist) {
 
 // playlist modal
 
-conc_playlistmodal = function (wid, aid, set) {
+conc_playlistmodal = function (wid, aid, set, work, composer) {
   $('#playlistmodal #existingplaylist').html('');
   var favoptions = Array();
   
@@ -1756,32 +1773,40 @@ conc_playlistmodal = function (wid, aid, set) {
   window.playlistwid = wid;
   window.playlistaid = aid;
   window.playlistset = set;
+  window.playlistwork = work;
+  window.playlistcomposer = composer;
   $('#tuning-modal').hide(0, function () { $("#playlistmodal").leanModal(); });
 }
 
 conc_addtoplaylist = function () {
 
   if ($('#playlistmodal #newplaylist').val() != "") {
-    conc_playlistperformance(window.playlistwid, window.playlistaid, window.playlistset, 'new', $('#playlistmodal #newplaylist').val(), 1);
+    conc_playlistperformance(window.playlistwid, window.playlistaid, window.playlistset, 'new', $('#playlistmodal #newplaylist').val(), window.playlistwork, window.playlistcomposer);
   }
   else if ($('#playlistmodal #existingplaylist').val() != "0") {
-    conc_playlistperformance(window.playlistwid, window.playlistaid, window.playlistset, $('#playlistmodal #existingplaylist').val(), $('#playlistmodal #existingplaylist option:checked').text(), 1);
+    conc_playlistperformance(window.playlistwid, window.playlistaid, window.playlistset, $('#playlistmodal #existingplaylist').val(), $('#playlistmodal #existingplaylist option:checked').text(), window.playlistwork, window.playlistcomposer);
   }
 }
 
 // add to playlist
 
-conc_playlistperformance = function (wid, aid, set, pid, name) {
+conc_playlistperformance = function (wid, aid, set, pid, name, work, composer) {
 
   $.ajax({
     url: conc_options.backend + '/recording/detail/work/' + wid + '/album/' + aid + '/' + set + '.json',
     method: "GET",
     success: function (response) {
+      data = { id: localStorage.user_id, wid: wid, aid: aid, set: set, pid: pid, name: name, cover: response.recording.cover, performers: JSON.stringify(response.recording.performers), auth: conc_authgen() };
+      
+      if (wid.includes('at*')) {
+        data["work"] = work;
+        data["composer"] = composer;
+      }
       
       $.ajax({
         url: conc_options.backend + '/dyn/recording/addplaylist/',
         method: "POST",
-        data: { id: localStorage.user_id, wid: wid, aid: aid, set: set, pid: pid, name: name, cover: response.recording.cover, performers: JSON.stringify(response.recording.performers), auth: conc_authgen() },
+        data: data,
         success: function (response) {
           if (response.status.success == "true") {
             conc_playlists = (response.list ? response.list : {});
@@ -1970,7 +1995,7 @@ conc_playlistdetail = function (pid) {
         draggable = "";
         pidsort = "";
 
-        $(listul).append('<li pid="' + docsr[performance].work.id + '-' + docsr[performance].apple_albumid + '-' + docsr[performance].set + '" class="performance"><ul>' + conc_recordingitem(docsr[performance], docsr[performance].work, response.playlist) + '</ul></li>');
+        $(listul).append('<li pid="' + docsr[performance].work.id.replace(/\*/g,'-') + '-' + docsr[performance].apple_albumid + '-' + docsr[performance].set + '" class="performance"><ul>' + conc_recordingitem(docsr[performance], docsr[performance].work, response.playlist) + '</ul></li>');
       }
     }
   });
@@ -2035,7 +2060,7 @@ conc_radioskip = function () {
       if (!$('#tuning-modal').is(':visible')) { $('#tuning-modal').leanModal(); }
       if (conc_radiofilter.type == 'playlist') {
         var thisrec = conc_radioqueue.shift();
-        thisrec = thisrec.split('-');
+        thisrec = thisrec.replace(/at\-/g, "at*").split('-');
         conc_recording (thisrec[0], thisrec[1], thisrec[2]);
       }
       else {
@@ -2131,7 +2156,7 @@ conc_playlistradio = function (where) {
     $('#radiotop select').prop("disabled", true);
 
     var thisrec = pids.shift();
-    thisrec = thisrec.split("-");
+    thisrec = thisrec.replace(/at\-/g, "at*").split("-");
     conc_recording (thisrec[0], thisrec[1], thisrec[2]);
   }
 }
@@ -2283,6 +2308,8 @@ conc_settings = function (mode) {
 
         $('#patrons').removeClass('hidden');
       }
+
+      $('#devicesync').toggleClass('signedin', (localStorage.user_signedin == 1));
       
       switch (mode) {
         case "desktop":
@@ -2295,4 +2322,27 @@ conc_settings = function (mode) {
     }
   });
 
+}
+
+// user sync
+
+conc_usersync = function (recid) {
+
+  $.ajax({
+    url: conc_options.backend + '/dyn/user/sync/',
+    method: "POST",
+    data: { auth: conc_authgen(), id: localStorage.user_id, recid: recid },
+    success: function (response) {
+      if (response.status.success == "true") {
+        localStorage.user_signedin = 1;
+        $('#devicesync').toggleClass('signedin', (localStorage.user_signedin == 1));
+
+        if (response.user.id != localStorage.user_id) {
+          if (response.user.auth) localStorage.user_auth = response.user.auth;
+          localStorage.user_id = response.user.id;
+          conc_init();
+        }
+      }
+    }
+  });
 }
